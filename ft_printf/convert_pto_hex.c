@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   convert_pto_hex.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/20 15:11:03 by itsiros           #+#    #+#             */
-/*   Updated: 2025/01/24 17:48:39 by itsiros          ###   ########.fr       */
+/*   Created: 2024/11/08 18:08:50 by itsiros           #+#    #+#             */
+/*   Updated: 2024/11/08 18:28:39 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#if !defined(MINITALK_H)
-# define MINITALK_H
+#include "ft_printf.h"
 
-# include <unistd.h>
-# include <signal.h>
-# include <stdbool.h>
-# include <stdlib.h>
-# include "./ft_printf/ft_printf.h"
-
-enum
+int	convert_pto_hex(long int i, int fd, int count)
 {
-	READY,
-	BUZY,
-};
+	uintptr_t	u;
+	char		*hex;
 
-void	signal_control(int signal_input, void *signal_control, int f);
-void	signal_kill(pid_t pid, int signmb);
-
-#endif // MINITALK_H
+	u = (uintptr_t) i;
+	hex = "0123456789abcdef";
+	if (u / 16 > 0)
+		count = convert_pto_hex(u / 16, fd, count);
+	count = ft_putchar_fd(hex[u % 16], fd, count);
+	return (count);
+}

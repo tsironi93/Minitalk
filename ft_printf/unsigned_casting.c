@@ -1,31 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   unsigned_casting.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/20 15:11:03 by itsiros           #+#    #+#             */
-/*   Updated: 2025/01/24 17:48:39 by itsiros          ###   ########.fr       */
+/*   Created: 2024/11/08 17:39:46 by itsiros           #+#    #+#             */
+/*   Updated: 2024/11/08 18:29:21 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#if !defined(MINITALK_H)
-# define MINITALK_H
+#include "ft_printf.h"
 
-# include <unistd.h>
-# include <signal.h>
-# include <stdbool.h>
-# include <stdlib.h>
-# include "./ft_printf/ft_printf.h"
-
-enum
+int	unsigned_casting(int i, int fd, int count)
 {
-	READY,
-	BUZY,
-};
+	unsigned int	u;
 
-void	signal_control(int signal_input, void *signal_control, int f);
-void	signal_kill(pid_t pid, int signmb);
-
-#endif // MINITALK_H
+	u = (unsigned int) i;
+	if (i >= 0)
+		return (ft_putnbr_fd(i, fd, count));
+	else
+	{
+		if (u > 10)
+		{
+			count = unsigned_casting(u / 10, fd, count);
+			count = ft_putnbr_fd(u % 10, fd, count);
+		}
+		return (count);
+	}
+}

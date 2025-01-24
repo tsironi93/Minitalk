@@ -1,31 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/20 15:11:03 by itsiros           #+#    #+#             */
-/*   Updated: 2025/01/24 17:48:39 by itsiros          ###   ########.fr       */
+/*   Created: 2024/11/01 15:38:10 by itsiros           #+#    #+#             */
+/*   Updated: 2024/11/08 18:36:00 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#if !defined(MINITALK_H)
-# define MINITALK_H
+#include "ft_printf.h"
 
-# include <unistd.h>
-# include <signal.h>
-# include <stdbool.h>
-# include <stdlib.h>
-# include "./ft_printf/ft_printf.h"
-
-enum
+int	ft_printf(const char *str, ...)
 {
-	READY,
-	BUZY,
-};
+	va_list	args;
+	int		count;
 
-void	signal_control(int signal_input, void *signal_control, int f);
-void	signal_kill(pid_t pid, int signmb);
-
-#endif // MINITALK_H
+	va_start(args, str);
+	count = 0;
+	while (*str != '\0')
+	{
+		if (*str != '%')
+			count = ft_putchar_fd(*str, 1, count);
+		else
+		{
+			str++;
+			count = ft_conversions(str, args, count);
+		}
+		str++;
+	}
+	va_end (args);
+	return (count);
+}

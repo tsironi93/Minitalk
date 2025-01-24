@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   print_pointer_hex.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/20 15:11:03 by itsiros           #+#    #+#             */
-/*   Updated: 2025/01/24 17:48:39 by itsiros          ###   ########.fr       */
+/*   Created: 2024/11/08 18:14:03 by itsiros           #+#    #+#             */
+/*   Updated: 2025/01/24 19:16:27 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#if !defined(MINITALK_H)
-# define MINITALK_H
+#include "ft_printf.h"
 
-# include <unistd.h>
-# include <signal.h>
-# include <stdbool.h>
-# include <stdlib.h>
-# include "./ft_printf/ft_printf.h"
-
-enum
+int	print_pointer_hex(void *ptr, int fd, int count)
 {
-	READY,
-	BUZY,
-};
+	uintptr_t	address;
 
-void	signal_control(int signal_input, void *signal_control, int f);
-void	signal_kill(pid_t pid, int signmb);
-
-#endif // MINITALK_H
+	address = (uintptr_t)ptr;
+	count = ft_putchar_fd('0', 1, count);
+	count = ft_putchar_fd('x', 1, count);
+	count = convert_pto_hex(address, fd, count);
+	return (count);
+}

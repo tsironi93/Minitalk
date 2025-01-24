@@ -1,31 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/20 15:11:03 by itsiros           #+#    #+#             */
-/*   Updated: 2025/01/24 17:48:39 by itsiros          ###   ########.fr       */
+/*   Created: 2024/11/08 18:21:40 by itsiros           #+#    #+#             */
+/*   Updated: 2024/11/13 15:06:15 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#if !defined(MINITALK_H)
-# define MINITALK_H
+#include "ft_printf.h"
 
-# include <unistd.h>
-# include <signal.h>
-# include <stdbool.h>
-# include <stdlib.h>
-# include "./ft_printf/ft_printf.h"
-
-enum
+int	ft_putstr_fd(char *s, int fd, int count)
 {
-	READY,
-	BUZY,
-};
+	size_t	i;
 
-void	signal_control(int signal_input, void *signal_control, int f);
-void	signal_kill(pid_t pid, int signmb);
-
-#endif // MINITALK_H
+	i = 0;
+	if (!s)
+	{
+		if (write(fd, "(null)", 6) == -1)
+			return (-1);
+		return (count + 6);
+	}
+	while (s[i])
+		count = ft_putchar_fd(s[i++], fd, count);
+	return (count);
+}

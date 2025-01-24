@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mini.c                                             :+:      :+:    :+:   */
+/*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 15:14:38 by itsiros           #+#    #+#             */
-/*   Updated: 2025/01/21 08:45:59 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/01/24 18:02:29 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,15 @@ static void	control(int signal_input, siginfo_t *info, void *rest)
 {
 	static char		a;
 	static int		bit;
-	static pid_t	mini;
-
+	static pid_t	pid;
 
 	(void)rest;
 	if (info->si_pid)
-		mini = info->si_pid;
+		pid = info->si_pid;
 	if (signal_input == SIGUSR1)
-		a |= (0x80 >> bit);
+		a |= (1 << (7 - bit));
 	if (signal_input == SIGUSR2)
-		a &= ~(0x80 >> bit);
+		a &= ~(1 << (7 - bit));
 	bit++;
 	if (bit == 8)
 	{
@@ -33,17 +32,17 @@ static void	control(int signal_input, siginfo_t *info, void *rest)
 		if (a == '\0')
 		{
 			write(STDOUT_FILENO, "\n", 1);
-			signal_kill(mini, SIGUSR2);
+			signal_kill(pid, SIGUSR2);
 			return ;
 		}
 		write(STDOUT_FILENO, &a, 1);
 	}
-	signal_kill(mini, SIGUSR1);
+	signal_kill(pid, SIGUSR1);
 }
 
 int	main(void)
 {
-	printf("Talk PID = %d\n", getpid());
+	ft_printf("Talk PID = %d\n", getpid());
 	signal_control(SIGUSR1, control, true);
 	signal_control(SIGUSR2, control, true);
 	while (1)

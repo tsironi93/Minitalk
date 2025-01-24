@@ -1,0 +1,60 @@
+NAME_SERVER = server
+NAME_CLIENT = client
+NAME_SERVER_BONUS = server_bonus
+NAME_CLIENT_BONUS = client_bonus
+
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
+
+SRCS = signal.c
+
+SRCS_SERVER = server.c $(SRCS)
+SRCS_CLIENT = client.c $(SRCS)
+SRCS_SERVER_BONUS = server_bonus.c $(SRCS)
+SRCS_CLIENT_BONUS = client_bonus.c $(SRCS)
+
+
+OBJS_SERVER = $(SRCS_SERVER:.c=.o)
+OBJS_CLIENT = $(SRCS_CLIENT:.c=.o)
+OBJS_SERVER_BONUS = $(SRCS_SERVER_BONUS:.c=.o)
+OBJS_CLIENT_BONUS = $(SRCS_CLIENT_BONUS:.c=.o)
+
+
+INCLUDES = minitalk.h
+
+FT_PRINTF_DIR = ./ft_printf
+FT_PRINTF_LIB = $(FT_PRINTF_DIR)/libftprintf.a
+
+all : $(NAME_SERVER) $(NAME_CLIENT)
+
+$(NAME_SERVER): $(OBJS_SERVER) $(FT_PRINTF_LIB)
+	$(CC) $(CFLAGS) -o $(NAME_SERVER) $(OBJS_SERVER) $(FT_PRINTF_LIB)
+
+$(NAME_CLIENT): $(OBJS_CLIENT) $(FT_PRINTF_LIB)
+	$(CC) $(CFLAGS) -o $(NAME_CLIENT) $(OBJS_CLIENT) $(FT_PRINTF_LIB)
+
+bonus: $(NAME_SERVER_BONUS) $(NAME_CLIENT_BONUS)
+
+$(NAME_SERVER_BONUS): $(OBJS_SERVER_BONUS) $(FT_PRINTF_LIB)
+	$(CC) $(CFLAGS) -o $(NAME_SERVER_BONUS) $(OBJS_SERVER_BONUS) $(FT_PRINTF_LIB)
+
+$(NAME_CLIENT_BONUS): $(OBJS_CLIENT_BONUS) $(FT_PRINTF_LIB)
+	$(CC) $(CFLAGS) -o $(NAME_CLIENT_BONUS) $(OBJS_CLIENT_BONUS) $(FT_PRINTF_LIB)
+
+%.o: %.c $(INCLUDES)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(FT_PRINTF_LIB):
+	$(MAKE) -C $(FT_PRINTF_DIR)
+
+clean:
+	$(MAKE) -C $(FT_PRINTF_DIR) clean
+	rm -f $(OBJS_SERVER) $(OBJS_CLIENT) $(OBJS_SERVER_BONUS) $(OBJS_CLIENT_BONUS)
+
+fclean: clean
+	$(MAKE) -C $(FT_PRINTF_DIR) fclean
+	rm -f $(NAME_SERVER) $(NAME_CLIENT) $(NAME_SERVER_BONUS) $(NAME_CLIENT_BONUS)
+
+re: fclean all
+
+.PHONY: all clean fclean re bonus

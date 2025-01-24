@@ -1,31 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/20 15:11:03 by itsiros           #+#    #+#             */
-/*   Updated: 2025/01/24 17:48:39 by itsiros          ###   ########.fr       */
+/*   Created: 2024/11/08 18:25:38 by itsiros           #+#    #+#             */
+/*   Updated: 2024/11/13 15:01:22 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#if !defined(MINITALK_H)
-# define MINITALK_H
+#include "ft_printf.h"
 
-# include <unistd.h>
-# include <signal.h>
-# include <stdbool.h>
-# include <stdlib.h>
-# include "./ft_printf/ft_printf.h"
-
-enum
+int	ft_putnbr_fd(int n, int fd, int count)
 {
-	READY,
-	BUZY,
-};
+	unsigned int	i;
 
-void	signal_control(int signal_input, void *signal_control, int f);
-void	signal_kill(pid_t pid, int signmb);
-
-#endif // MINITALK_H
+	if (n < 0)
+	{
+		count = ft_putchar_fd('-', fd, count);
+		n *= -1;
+	}
+	i = n;
+	if (i > 9)
+	{
+		count = ft_putnbr_fd(i / 10, fd, count);
+		count = ft_putnbr_fd(i % 10, fd, count);
+	}
+	else
+		count = ft_putchar_fd(i + '0', fd, count);
+	return (count);
+}
